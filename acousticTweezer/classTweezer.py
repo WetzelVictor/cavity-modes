@@ -32,7 +32,6 @@ class Pulsations_Propres:
 	def get_w(self, n, m):
 		return self.w_index[m][n]
 
-
 """ === MODES PROPRES === """
 class Xmn:
 	def __init__(self,  x, y, Lx, Ly, N = 1 , M = 1):
@@ -70,8 +69,6 @@ class Xmn:
 
 	def get_mode(self, n, m):
 		return self.mode_index[n + m*(self.N)]
-
-
 
 """ === MASSE MODALE === """
 class Masse_Modale:
@@ -112,9 +109,7 @@ class Masse_Modale:
 	def get_mass(self, n, m):
 		return self.mass_index[m][n]
 
-
 """ === RÉPONSE FORCÉE === """
-
 class Modes_Forces:
 	def __init__(self, X, amp, M, N, Nx, Ny):
 
@@ -147,37 +142,35 @@ class Modes_Forces:
 		self.rep_potentiel = self.rep_potentiel * np.cos(W*t)
 		self.rep_pression  = self.rep_pression  * np.sin(W*t)
 
-
 """ === PARTICULE === """
-
 class particule:
-	def __init__(self, v0=[0.,0.], x0=0., y0=0., acContFact = 1., rho=10., diam= 0.01):
+	def __init__(self, amp,v0=[0.,0.], x0=0., y0=0., acContFact = 1., rho=10., diam= 0.01):
 		
 		# Conditions Initiales
-		self.v0 = v0
-		self.x0, self.y0 = float(x0), float(y0)
+		self.v0 = v0 # vecteur vitesse initiale
+		self.p0 = [float(x0), float(y0)] # position initiale
 
-		# Attributs
-		self.v = [0,0]
-		self.xy= [0,0]
+		# Attributs: vitesse et position
+		self.u = 0. # vitesse /x
+		self.v = 0  # vitesse /y
+
+		self.p = [0,0] # Position
 
 		# Caractéristiques physiques
-		self.PHI, self.rho, self.volume = acContFact, rhop, 4./3.*PI*(diam**2)/4.
-		self.m = self.rho * self.volume
-
-	def compute_position(self,t):
-		return
-
-	def compute_speed(self,p):
-		return
+		self.rhop, self.volume =  rhop, 4./3.*PI*(diam**2)/4.
+		self.m = self.rhop * self.volume
 
 	def compute_Frad(self,pressure_field, speed_field):
 		return
 
+	
+	def compute_position(self,t):
+		return
+
+
 
 """ === SOURCE === """
 # Source plane située en x=0 ou x=Lx
-
 class source_paroi_gd:
 
 	def __init__(self, X_mn, masse_modale, w_mn, x, y, Lx, Ly, Nx, Ny, N, M, F0=1, W=0, amor = 0.01):
@@ -218,7 +211,6 @@ class source_paroi_gd:
 
 	def calcule_reponse(self, t):
 		self.response.calcule_reponse(t, self.W)
-
 
 # --- Source plane située en y=0 ou y=Lx
 class source_paroi_hb:
@@ -310,8 +302,6 @@ class speed:
 		self.V *= np.cos(W*t)
 
 		
-
-
 
 
 
