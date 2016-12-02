@@ -42,4 +42,4 @@ N = 5
 # Classe de modes
 modes = indModes.Xmn(x,y,Lx,Ly,N=N,M=M)
 
-clg.colorGraph(modes.get_mode(0,1))
+clg.colorGraph(modes.get_mode(1,1))
