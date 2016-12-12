@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# Victor Wetzel, UPMC, 2016
+# Cinna Peyghamy, UPMC, 2016
 
 """
 Modelisation et visualisation de la réponse acoustique

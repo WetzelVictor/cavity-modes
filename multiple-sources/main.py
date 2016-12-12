@@ -1,6 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Victor Wetzel, UPMC, 2016, wetzel.victor@gmail.com
+# Cinna Peyghamy, UPMC, 2016
+
+
 """
 Modelisation et visualisation de la réponse acoustique
 d'une cavité parallèlepipédique 2D parfaitement régléchissante

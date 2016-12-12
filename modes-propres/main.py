@@ -1,6 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # filename : 'modespropres\main.py'
+
+# Victor Wetzel, UPMC, 2016, wetzel.victor@gmail.com
+# Cinna Peyghamy, UPMC, 2016
+
 """
 MODES PROPRES
 Visualisation des modes propres d'une cavité rectangulaire

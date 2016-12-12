@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+
+
+# Victor Wetzel, UPMC, 2016, wetzel.victor@gmail.com
+# Cinna Peyghamy, UPMC, 2016
+
 import colorGraph as clg
 import numpy as np
 import pylab as plt

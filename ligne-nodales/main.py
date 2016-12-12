@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
+
+
+# Victor Wetzel, UPMC, 2016, wetzel.victor@gmail.com
+# Cinna Peyghamy, UPMC, 2016
+
 import numpy as np 
 import matplotlib.pyplot as plt
 import matplotlib as mtp

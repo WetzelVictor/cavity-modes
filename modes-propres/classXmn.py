@@ -2,6 +2,11 @@ import numpy as np
 import colorGraph as clg
 PI = np.pi
 
+
+# Victor Wetzel, UPMC, 2016, wetzel.victor@gmail.com
+# Cinna Peyghamy, UPMC, 2016
+
+
 class Xmn:
 	def __init__(self,  x, y, Lx, Ly, N = 1 , M = 1):
 
