@@ -49,11 +49,12 @@ t1 = 0.001
 t2 = t1 + PI
 
 # === Source 1 ===
-source_gd = twe.source_paroi_gd( X_mn, masse, w_mn, x, y, Lx, Ly, Nx, Ny, N, M, F0=1, W=w_mn.get_w(0,3), amor = 0.1)
+y0 = 100
+source_gd = twe.source_paroi_gd( X_mn, masse, w_mn, y0, x, y, Lx, Ly, Nx, Ny, N, M, F0=1, W=w_mn.get_w(0,3), amor = 0.1)
 source_gd.calcule_reponse(t1)
 
 # === Source 2 ===
-source_hb = twe.source_paroi_hb( X_mn, masse, w_mn, x, y, Lx, Ly, Nx, Ny, N, M, F0=1, W=w_mn.get_w(0,4), amor = 0.1)
+source_hb = twe.source_paroi_hb( X_mn, masse, w_mn, x, y, Lx, Ly, Nx, Ny, N, M, F0=0, W=w_mn.get_w(0,4), amor = 0.1)
 source_hb.calcule_reponse(t2)
 
 

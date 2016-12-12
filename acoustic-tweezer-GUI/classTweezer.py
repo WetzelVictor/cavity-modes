@@ -32,6 +32,19 @@ class Pulsations_Propres:
 	def get_w(self, n, m):
 		return self.w_index[m][n]
 
+	def get_table(self, n_max=7, m_max=7):
+		n_freqs = ''
+		m_freqs = ''
+
+		for M in xrange(n_max):
+			m_freqs += '\n w {0}-{1} = {2}'.format(0,M,round(self.get_w(0,M)))
+
+		for N in xrange(n_max):
+			n_freqs += '\n w {0}-{1} = {2}'.format(N,0,round(self.get_w(N,0)))
+
+		return [n_freqs,m_freqs]
+
+
 """ === MODES PROPRES === """
 class Xmn:
 	def __init__(self,  x, y, Lx, Ly, N = 1 , M = 1):
@@ -70,6 +83,8 @@ class Xmn:
 	def get_mode(self, n, m):
 		return self.mode_index[n + m*(self.N)]
 
+
+
 """ === MASSE MODALE === """
 class Masse_Modale:
 	def __init__(self,  x, y, Lx, Ly, N = 1 , M = 1, rho=1):
@@ -93,8 +108,6 @@ class Masse_Modale:
 		self.compute_masses()
 
 
-
-
 	def compute_masses(self):
 		for m in xrange(self.M):
 			for n in xrange(self.N):
@@ -109,7 +122,9 @@ class Masse_Modale:
 	def get_mass(self, n, m):
 		return self.mass_index[m][n]
 
+
 """ === RÉPONSE FORCÉE === """
+
 class Modes_Forces:
 	def __init__(self, X, amp, M, N, Nx, Ny):
 
@@ -127,7 +142,9 @@ class Modes_Forces:
 
 
 	def calcule_reponse(self, t, W):
-		reponse = self.empty_reponse
+		reponse = self.empty_reponse*0
+		self.rep_pression *= 0
+		self.rep_potentiel *= 0
 		rho_f = 1
 
 		for n in xrange(self.N):
@@ -139,45 +156,54 @@ class Modes_Forces:
 				self.rep_pression += rep_pression.transpose()
 				self.rep_potentiel += rep_pot.transpose()
 
+
 		self.rep_potentiel = self.rep_potentiel * np.cos(W*t)
 		self.rep_pression  = self.rep_pression  * np.sin(W*t)
 
+		self.rep_potentiel[0][0] = 2
+		self.rep_potentiel[0][1] = -2
+
+		self.rep_pression[0][0] = 2
+		self.rep_pression[0][1] = -2
+
+
+
 """ === PARTICULE === """
+
 class particule:
-	def __init__(self, amp,v0=[0.,0.], x0=0., y0=0., acContFact = 1., rho=10., diam= 0.01):
+	def __init__(self, v0=[0.,0.], x0=0., y0=0., acContFact = 1., rho=10., diam= 0.01):
 		
 		# Conditions Initiales
-		self.v0 = v0 # vecteur vitesse initiale
-		self.p0 = [float(x0), float(y0)] # position initiale
+		self.v0 = v0
+		self.x0, self.y0 = float(x0), float(y0)
 
-		# Attributs: vitesse et position
-		self.u = 0. # vitesse /x
-		self.v = 0  # vitesse /y
-
-		self.p = [0,0] # Position
+		# Attributs
+		self.v = [0,0]
+		self.xy= [0,0]
 
 		# Caractéristiques physiques
-		self.rhop, self.volume =  rhop, 4./3.*PI*(diam**2)/4.
-		self.m = self.rhop * self.volume
+		self.PHI, self.rho, self.volume = acContFact, rhop, 4./3.*PI*(diam**2)/4.
+		self.m = self.rho * self.volume
+
+	def compute_position(self,t):
+		return
+
+	def compute_speed(self,p):
+		return
 
 	def compute_Frad(self,pressure_field, speed_field):
 		return
 
-	
-	def compute_position(self,t):
-		return
-
-
 
 """ === SOURCE === """
 # Source plane située en x=0 ou x=Lx
+
 class source_paroi_gd:
 
-	def __init__(self, X_mn, masse_modale, w_mn, y0, x, y, Lx, Ly, Nx, Ny, N, M, F0=1, W=0, amor = 0.01):
+	def __init__(self, X_mn, masse_modale, w_mn, x, y, Lx, Ly, Nx, Ny, N, M, F0=1, W=0, amor = 0.01):
 		
 		self.F0 = F0
 		self.W = W
-		self.y0 = y0
 
 		self.X = X_mn
 		self.w_mn = w_mn
@@ -199,19 +225,27 @@ class source_paroi_gd:
 		self.response = Modes_Forces(self.X, self, self.M, self.N, self.Nx, self.Ny)
 
 	def compute_amps(self):
+		amp = 0
 		self.amp_index *=0
 
 		for m in xrange(self.M):
-				amp = (self.F0*np.cos(m*PI*self.y0/self.Ly)) / \
+				amp = self.F0 / \
 				(self.masse_modale.get_mass(0,m)*(self.w_mn.get_w(0,m)**2 - self.W**2 +self.amor)) # dernier flottant est l'amortissement
 				
 				self.amp_index[m][0] = amp
+
 
 	def get_amp(self, n, m):
 		return self.amp_index[m][n]
 
 	def calcule_reponse(self, t):
 		self.response.calcule_reponse(t, self.W)
+
+	def setPulse(self, x):
+		self.W = x
+		self.compute_amps()
+
+
 
 # --- Source plane située en y=0 ou y=Lx
 class source_paroi_hb:
@@ -254,6 +288,9 @@ class source_paroi_hb:
 
 	def calcule_reponse(self, t):
 		self.response.calcule_reponse(t, self.W)
+
+	def setPulse(self, y):
+		self.W = y
 
 
 # === SPEED ===
@@ -303,6 +340,8 @@ class speed:
 		self.V *= np.cos(W*t)
 
 		
+
+
 
 
 
